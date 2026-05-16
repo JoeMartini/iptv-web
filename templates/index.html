@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>IPTV Web Player</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<script src="{{ url_for('static', filename='js/hls.min.js') }}"></script>
+</head>
+<body>
+
+<div class="top-area">
+  <video id="player" controls playsinline crossorigin="anonymous" preload="none"></video>
+  <div class="now-playing" id="nowPlaying">点击频道开始播放</div>
+  <div class="toolbar">
+    <div class="title">📺 IPTV</div>
+    <button class="btn" onclick="loadPlaylist(false)">🔄 刷新</button>
+    <button class="btn" onclick="loadPlaylist(true)">⬇️ 拉取最新</button>
+    <button class="btn" id="btnShowAll" onclick="toggleShowAll()">全部</button>
+  </div>
+</div>
+
+<div id="groups"><div class="empty">正在加载频道列表…</div></div>
+<div id="toast"></div>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+</body>
+</html>
