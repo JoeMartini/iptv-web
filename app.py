@@ -392,7 +392,14 @@ def api_proxy() -> Any:
         return jsonify({"error": str(exc)[:200]}), 502
 
     content_type = resp.headers.get("content-type", "").lower()
-    is_m3u8 = target.endswith(".m3u8") or "mpegurl" in content_type or "m3u8" in content_type
+    body = resp.content
+    # Detect m3u8 by suffix, content-type, or body signature
+    is_m3u8 = (
+        target.endswith(".m3u8")
+        or "mpegurl" in content_type
+        or "m3u8" in content_type
+        or body.strip().startswith(b"#EXTM3U")
+    )
 
     if is_m3u8:
         m3u8_content = resp.content.decode("utf-8", errors="ignore")
