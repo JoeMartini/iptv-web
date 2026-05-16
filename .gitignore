@@ -39,4 +39,4 @@ dmypy.json
 .vscode/
 *.swp
 *.swo
-*~
+*~*.bak.*
