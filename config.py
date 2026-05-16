@@ -25,7 +25,7 @@ class Config:
     HEALTH_CACHE_TTL: int = int(os.environ.get("IPTV_HEALTH_TTL", "300"))
 
     # Proxy
-    CLASH_PROXY: Optional[str] = os.environ.get("CLASH_PROXY")
+    CLASH_PROXY: Optional[str] = os.environ.get('CLASH_PROXY', 'http://192.168.1.146:7890')
     CLASH_PROXIES: Optional[dict] = None
     if CLASH_PROXY:
         CLASH_PROXIES = {"http": CLASH_PROXY, "https": CLASH_PROXY}

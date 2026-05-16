@@ -149,16 +149,25 @@ def _check_single_mode(url: str, use_clash: bool = False) -> dict:
             return {"status": "yellow", "latency": round(time.time() - start, 2),
                     "error": "No media segments"}
 
-        # Non-HLS direct stream
-        r = requests.head(
+        # Non-HLS direct stream: use GET with stream=True to verify
+        # HEAD can return 200 for dead endpoints that serve HTML error pages
+        r = requests.get(
             url,
             timeout=Config.HEALTH_CHECK_TIMEOUT,
             headers={"User-Agent": "Mozilla/5.0"},
+            stream=True,
             allow_redirects=True,
             proxies=proxies,
         )
         r.raise_for_status()
+        # Read first 1KB to verify it's not an HTML error page
+        chunk = r.raw.read(1024)
+        content_type = r.headers.get("content-type", "").lower()
         latency = time.time() - start
+        # Reject HTML responses (likely error/placeholder pages)
+        if "text/html" in content_type and b"<html" in chunk.lower():
+            return {"status": "red", "latency": round(latency, 2),
+                    "error": "Invalid stream (HTML page)"}
         return {"status": "green" if latency < 2 else "yellow",
                 "latency": round(latency, 2), "error": None}
 
