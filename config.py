@@ -37,7 +37,7 @@ class Config:
     )  # 100MB
     PROXY_TIMEOUT: int = int(os.environ.get("IPTV_PROXY_TIMEOUT", "60"))
     RATE_LIMIT_ENABLED: bool = os.environ.get("IPTV_RATE_LIMIT", "true").lower() == "true"
-    RATE_LIMIT_REQUESTS: int = int(os.environ.get("IPTV_RATE_LIMIT_REQ", "60"))
+    RATE_LIMIT_REQUESTS: int = int(os.environ.get("IPTV_RATE_LIMIT_REQ", "500"))
     RATE_LIMIT_WINDOW: int = int(os.environ.get("IPTV_RATE_LIMIT_WINDOW", "60"))
 
     # Health check
