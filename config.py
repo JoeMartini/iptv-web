@@ -21,7 +21,16 @@ class Config:
         "IPTV_PLAYLIST_URL",
         "https://raw.githubusercontent.com/YueChan/Live/main/GNTV.m3u",
     )
+    # Multiple playlist sources (comma-separated), first is primary
+    PLAYLIST_URLS: list[str] = [
+        u.strip() for u in os.environ.get(
+            "IPTV_PLAYLIST_URLS",
+            "",
+        ).split(",")
+        if u.strip()
+    ]
     PLAYLIST_CACHE_TTL: int = int(os.environ.get("IPTV_CACHE_TTL", "300"))
+
     HEALTH_CACHE_TTL: int = int(os.environ.get("IPTV_HEALTH_TTL", "300"))
 
     # Proxy

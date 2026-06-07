@@ -8,12 +8,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf 
 # Create non-root user
 RUN groupadd -r iptv && useradd -r -g iptv -d /app iptv
 
+# Create cache directory with correct ownership
+RUN mkdir -p /app/cache && chown iptv:iptv /app/cache
+
 # Install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application
-COPY --chown=iptv:iptv app.py config.py ./
+COPY --chown=iptv:iptv app.py config.py playlist.m3u ./
 COPY --chown=iptv:iptv templates/ ./templates/
 COPY --chown=iptv:iptv static/ ./static/
 

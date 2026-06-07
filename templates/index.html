@@ -2,26 +2,56 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="IPTV Web Player - 自定义 IPTV 直播播放器，支持 HLS / FLV 格式与播放历史">
+<meta name="theme-color" content="#0a0a0a">
 <title>IPTV Web Player</title>
+<meta name="theme-color" content="#0a0a0a" id="themeColor">
+<script>
+(function() {
+    const saved = localStorage.getItem('iptv-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = saved || (prefersDark ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+    const tc = document.getElementById('themeColor');
+    if (tc) tc.setAttribute('content', theme === 'dark' ? '#0a0a0a' : '#f5f5f5');
+})();
+</script>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 <script src="{{ url_for('static', filename='js/hls.min.js') }}"></script>
 </head>
-<body>
+<body data-theme="dark">
 
 <div class="top-area">
   <video id="player" controls playsinline crossorigin="anonymous" preload="none"></video>
   <div class="now-playing" id="nowPlaying">点击频道开始播放</div>
-  <div class="toolbar">
-    <div class="title">📺 IPTV</div>
-    <button class="btn" onclick="loadPlaylist(false)">🔄 刷新</button>
-    <button class="btn" onclick="loadPlaylist(true)">⬇️ 拉取最新</button>
+  <div class="toolbar" role="toolbar" aria-label="播放控制">
+    <div class="title">IPTV</div>
+    <button class="btn" onclick="loadPlaylist(false)">刷新</button>
+    <button class="btn" onclick="loadPlaylist(true)">拉取最新</button>
     <button class="btn" id="btnShowAll" onclick="toggleShowAll()">全部</button>
+    <button class="btn" onclick="openHistoryDrawer()">历史</button>
+    <button class="btn" id="themeBtn" onclick="toggleTheme()" title="切换主题 (T)" aria-label="切换主题">🌙</button>
   </div>
 </div>
 
 <div id="groups"><div class="empty">正在加载频道列表…</div></div>
-<div id="toast"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- History Drawer -->
+<div class="drawer-overlay" id="historyOverlay" onclick="closeHistoryDrawer()"></div>
+<div class="drawer" id="historyDrawer" role="dialog" aria-modal="true" aria-label="播放历史">
+  <div class="drawer-header">
+    <span class="drawer-title">播放历史</span>
+    <div class="drawer-actions">
+      <button class="btn-small" onclick="clearHistory()">清空</button>
+      <button class="btn-small" onclick="closeHistoryDrawer()">关闭</button>
+    </div>
+  </div>
+  <div class="drawer-body" id="historyDrawerBody">
+    <div class="drawer-empty">暂无播放记录</div>
+  </div>
+</div>
 
 <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 
