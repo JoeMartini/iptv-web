@@ -8,7 +8,7 @@ services:
       - "${IPTV_PORT:-5005}:5005"
     environment:
       - IPTV_PLAYLIST_URL=${IPTV_PLAYLIST_URL:-https://raw.githubusercontent.com/YueChan/Live/main/GNTV.m3u}
-      - CLASH_PROXY=${CLASH_PROXY:-http://192.168.1.146:7890}
+      - CLASH_PROXY=${CLASH_PROXY:-}
       - IPTV_LOG_LEVEL=${IPTV_LOG_LEVEL:-INFO}
       - IPTV_RATE_LIMIT=${IPTV_RATE_LIMIT:-true}
     restart: unless-stopped
